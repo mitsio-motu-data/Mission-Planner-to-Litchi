@@ -99,7 +99,7 @@ def check_valid_line(line: list[str]) -> bool:
 
 # pylint: disable=too-many-locals,too-many-branches,too-many-statements
 # (better split function so pylint is happy)
-def convert(filename: str, set_agl=True) -> Tuple[list[str], list[str], list[str]]:
+def convert(filename_input: str, filename_output: str, set_agl=True) -> Tuple[list[str], list[str], list[str]]:
     """
     Converts a single file
     Args:
@@ -115,11 +115,11 @@ def convert(filename: str, set_agl=True) -> Tuple[list[str], list[str], list[str
     warnings: list[str] = []  # List of warning messages
     errors: list[str] = []  # List of error messages
     speed_not_set = True  # Indicator if Mission Planner DO_CHANGE_SPEED is set
-    if not os.path.exists(filename):
+    if not os.path.exists(filename_input):
         errors.append(ErrorMessage.FILE_NOT_FOUND.value)
 
     receiver_cmds = [MPCommand.WAYPOINT]  # mp commands that can be referenced by action commands
-    file_list = parse_file(filename)
+    file_list = parse_file(filename_input)
     global_cmd_manager = GlobalMPCmdManager()
     waypoint_list: list[Waypoint] = []
     temp_wp: Waypoint | None = None
@@ -194,11 +194,11 @@ def convert(filename: str, set_agl=True) -> Tuple[list[str], list[str], list[str
     for waypoint in waypoint_list:
         output_string += waypoint.to_line()
 
-    with open(f"{filename}.csv", "w", encoding='utf-8') as output_file:
+    with open(f"{filename_output}.csv", "w", encoding='utf-8') as output_file:
         output_file.write(output_string)
         output_file.close()
 
-    print(f"\nFile saved: {filename}.csv")
+    print(f"\nFile saved: {filename_output}.csv")
     if speed_not_set:
         infos.append(str(InfoMessage.NO_SPEED_SET.value))
     return infos, warnings, errors
