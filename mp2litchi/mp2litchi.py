@@ -198,7 +198,7 @@ def convert(filename_input: str, filename_output: str, set_agl=True) -> Tuple[li
         output_file.write(output_string)
         output_file.close()
 
-    print(f"\nFile saved: {filename_output}.csv")
+    #print(f"\nFile saved: {filename_output}.csv")
     if speed_not_set:
         infos.append(str(InfoMessage.NO_SPEED_SET.value))
     return infos, warnings, errors
